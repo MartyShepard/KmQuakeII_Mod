@@ -405,6 +405,9 @@ void Q_snprintfz(char *dst, size_t dstSize, const char *fmt, ...);
 char *Q_strlwr(char *string);
 char *Q_strupr(char *string);
 
+/* portable safe string copy/concatenate */
+/*int Q_strlcpy(char* dst, const char* src, int size);*/
+
 //=============================================
 
 short BigShort(short l);
@@ -512,7 +515,7 @@ void Com_Printf(char *msg, ...);
 	} cvar_t;
 #endif // CVAR
 
-
+qboolean borderless;
 /*
 ==============================================================
 	COLLISION DETECTION

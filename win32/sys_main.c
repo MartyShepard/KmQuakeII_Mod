@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // sys_main.c
 
+#include <windows.h>
 #include "../qcommon/qcommon.h"
 #include <SDL2/SDL_main.h>
 
@@ -33,6 +34,87 @@ int main(int argc, char **argv)
 	// Setup DPI awareness
 	Sys_SetHighDPIMode();
 
+	// crappy argument parser can't parse.
+	for (int i = 0; i < argc; i++)
+	{
+
+		// Borderless?
+		if (strcmp(argv[i], "-borderless") == 0)
+		{
+			borderless = true;
+		}
+		// Inject a custom data dir.
+		// Weiteres Verzeichnis als Suchpfad Hinzufügen
+		if (strcmp(argv[i], "-datadir") == 0)
+		{
+			// Mkay, did the user give us an argument?
+			if (i != (argc - 1))
+			{
+				DWORD attrib;
+				WCHAR wpath[MAX_OSPATH];
+
+				MultiByteToWideChar(CP_UTF8, 0, argv[i + 1], -1, wpath, MAX_OSPATH);
+				attrib = GetFileAttributesW(wpath);
+
+				if (attrib != INVALID_FILE_ATTRIBUTES)
+				{
+					if (!(attrib & FILE_ATTRIBUTE_DIRECTORY))
+					{
+						printf("-datadir %s is not a directory\n", argv[i + 1]);
+						return 1;
+					}
+
+					Q_strncpyz(datadir, argv[i + 1], MAX_OSPATH);
+				}
+				else
+				{
+					printf("-datadir %s could not be found\n", argv[i + 1]);
+					return 1;
+				}
+			}
+			else
+			{
+				printf("-datadir needs an argument\n");
+				return 1;
+			}
+		}
+
+		// Inject a custom data dir.
+		if (strcmp(argv[i], "-addondir") == 0)
+		{
+			// Mkay, did the user give us an argument?
+			if (i != (argc - 1))
+			{
+				DWORD attrib;
+				WCHAR wpath[MAX_OSPATH];
+
+				MultiByteToWideChar(CP_UTF8, 0, argv[i + 1], -1, wpath, MAX_OSPATH);
+				attrib = GetFileAttributesW(wpath);
+
+				if (attrib != INVALID_FILE_ATTRIBUTES)
+				{
+					if (!(attrib & FILE_ATTRIBUTE_DIRECTORY))
+					{
+						printf("-addondir %s is not a directory\n", argv[i + 1]);
+						return 1;
+					}
+
+					Q_strncpyz(addondir, argv[i + 1], MAX_OSPATH);
+				}
+				else
+				{
+					printf("-addondir %s could not be found\n", argv[i + 1]);
+					return 1;
+				}
+			}
+			else
+			{
+				printf("-addondir needs an argument\n");
+				return 1;
+			}
+		}
+
+	}
 	// Init console window
 	Sys_InitDedConsole();
 #endif

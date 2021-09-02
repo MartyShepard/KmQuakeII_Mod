@@ -843,6 +843,15 @@ extern	cvar_t *fs_basedir;
 
 extern	FILE *log_stats_file;
 
+/* Hack for portable client */
+extern qboolean is_portable;
+extern qboolean disable_Cinematic;
+extern qboolean borderless;
+
+/* Hack for external datadir */
+extern char datadir[MAX_OSPATH];
+extern char addondir[MAX_OSPATH];
+
 // host_speeds times
 extern int time_before_game;
 extern int time_after_game;

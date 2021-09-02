@@ -27,6 +27,7 @@ are implemented here, everything else is in the r_sdl2.c.
 #include <SDL2/SDL_video.h>
 #include "../renderer/r_local.h"
 #include "../win32/sdlquake.h" //mxd
+#include "../qcommon/qcommon.h"
 
 #define WINDOW_TITLE		ENGINE_NAME
 #define WINDOW_TITLE_MP1	ENGINE_NAME" - The Reckoning"
@@ -36,6 +37,7 @@ extern cvar_t *vid_ref;
 
 SDL_Window *window = NULL;
 static qboolean initSuccessful = false;
+
 
 // (Un)grab Input
 void GLimp_GrabInput(qboolean grab)
@@ -76,6 +78,9 @@ static qboolean CreateSDLWindow(int flags, int x, int y, int w, int h)
 	else
 		title = WINDOW_TITLE;
 	
+	if (borderless)
+		flags |= SDL_WINDOW_BORDERLESS;
+
 	window = SDL_CreateWindow(title, x, y, w, h, flags);
 
 	return window != NULL;
@@ -160,7 +165,7 @@ void GLimp_WindowEvent(SDL_Event *event)
 
 static int GetFullscreenType()
 {
-	if (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN_DESKTOP)
+	if (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN_DESKTOP| SDL_WINDOW_BORDERLESS)
 		return 1;
 
 	if (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN)

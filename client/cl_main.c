@@ -1263,7 +1263,7 @@ static qboolean CL_WriteConfiguration(char *cfgName)
 		return false;
 
 	// Knightmare changed- use separate config for better cohabitation
-	char path[MAX_QPATH];
+	char path[1024];
 	Com_sprintf(path, sizeof(path), "%s/%s.cfg", FS_Gamedir(), cfgName);
 	FILE *f = fopen(path, "w");
 	if (!f)

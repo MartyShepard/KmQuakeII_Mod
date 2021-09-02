@@ -118,6 +118,12 @@ static qboolean fs_fileInPack;
 qboolean file_from_pak;
 char last_pk3_name[MAX_QPATH];
 
+char datadir[MAX_OSPATH];
+char addondir[MAX_OSPATH];
+
+qboolean file_from_protected_pak;
+qboolean disable_Cinematic;
+
 cvar_t *fs_homepath;
 cvar_t *fs_basedir;
 cvar_t *fs_basegamedir;
@@ -1370,6 +1376,8 @@ void FS_Startup(void)
 			Q_strncpyz(fs_gamedir, fs_basedir->string, sizeof(fs_gamedir));
 		else
 			FS_AddGameDirectory(va("%s/%s", fs_homepath->string, fs_gamedirvar->string)); // Add the directories
+
+		
 	}
 
 	Q_strncpyz(fs_currentGame, fs_gamedirvar->string, sizeof(fs_currentGame));
@@ -1407,9 +1415,49 @@ void FS_InitFilesystem(void)
 	fs_basegamedir2 = Cvar_Get("basegame2", "", CVAR_LATCH);
 	fs_gamedirvar = Cvar_Get("game", "", CVAR_LATCH|CVAR_SERVERINFO);
 
-	// Check and load game directory
-	if (fs_gamedirvar->string[0])
-		FS_SetGamedir(fs_gamedirvar->string);
+	// Deprecation warning, can be removed at a later time.
+	if (strcmp(fs_basedir->string, ".") != 0)
+	{
+		Com_Printf("+set basedir is deprecated, use -datadir instead\n");
+		strcpy(datadir, fs_basedir->string);
+	}
+
+	else if (strlen(datadir) == 0)
+	{
+		strcpy(datadir, "");
+	}
+	else if (strlen(datadir) >= 1)
+	{
+
+		strcat(datadir,  "\\");
+		strcat(datadir, BASEDIRNAME);		
+		FS_AddGameDirectory(va(datadir)); // Add the directories
+	}
+
+	if (strlen(addondir) == 0)
+	{
+		strcpy(addondir, "");
+
+		// Check and load game directory
+		if (fs_gamedirvar->string[0])
+			FS_SetGamedir(fs_gamedirvar->string);
+
+	}
+	else if (strlen(addondir) >= 1)
+	{
+		
+		if (fs_gamedirvar->string[0]) {
+			strcat(addondir, "\\");
+			strcat(addondir, fs_gamedirvar->string);
+		}		
+
+		FS_AddGameDirectory(va(addondir)); // Add the directories
+	}
+
+	if (strlen(datadir) >= 1)
+	{
+		FS_AddGameDirectory(va(fs_homepath->string, "")); // Add the directories
+	}
 
 	FS_Path_f(); // output path data
 }
@@ -1461,11 +1509,13 @@ void FS_SetGamedir(char *dir)
 {
 	qboolean basegame1_loaded = false;
 
+	
 	if (strstr(dir, "..") || strchr(dir, '/') || strchr(dir, '\\') || strchr(dir, ':')) //mxd. strstr -> strchr
 	{
 		Com_Printf("Gamedir should be a single filename, not a path\n");
 		return;
 	}
+	
 
 	// Knightmare- check basegame var
 	if (fs_basegamedir->string[0])
@@ -1486,6 +1536,7 @@ void FS_SetGamedir(char *dir)
 	// Knightmare- check basegame2 var
 	if (fs_basegamedir2->string[0])
 	{
+		
 		if (strstr(fs_basegamedir2->string, "..") || strchr(fs_basegamedir2->string, '/') || strchr(fs_basegamedir2->string, '\\') || strchr(fs_basegamedir2->string, ':')) //mxd. strstr -> strchr
 		{
 			Cvar_Set("basegame2", "");
@@ -1497,6 +1548,7 @@ void FS_SetGamedir(char *dir)
 			Cvar_Set("basegame2", "");
 			Com_Printf("Basegame2 should not be the same as "BASEDIRNAME", gamedir, or basegame.\n");
 		}
+		
 	}
 
 	// Free up any current game dir info

@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // These are the key numbers that should be passed to Key_Event
 typedef enum
 {
+	// K_GRAVE = 68,
 	K_TAB = 9,
 	K_ENTER = 13,
 	K_ESCAPE = 27,

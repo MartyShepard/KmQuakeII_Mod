@@ -586,7 +586,7 @@ void Key_Event(int key, qboolean down)
 		shift_down = down;
 
 	// Console key is hardcoded, so the user can never unbind it
-	if (key == '`' || key == '~')
+	if (key == '`' || key == '~' || key == '^')
 	{
 		if (down)
 			Con_ToggleConsole_f();
