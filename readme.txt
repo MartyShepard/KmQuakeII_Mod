@@ -31,3 +31,5 @@ KmQuake 0.20 B7 Modified: (Modified for personal and private use )
 -borderless	: Run Borderless in Window Mode
 -datadir	  : Add Fullpath to a seperate Datadir with BaseQ2
 -addondir	  : Add a seperate fullpath to a Addon/Mod. Optional use +set Game
+
+Compile: Visual Studio 19
