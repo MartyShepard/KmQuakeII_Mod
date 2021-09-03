@@ -27,3 +27,7 @@ John Carmack
 Id Software
 
 
+KmQuake 0.20 B7 Modified:
+-borderless	: Run Borderless in Window Mode
+-datadir	  : Add Fullpath to a seperate Datadir with BaseQ2
+-addondir	  : Add a seperate fullpath to a Addon/Mod. Optional use +set Game
