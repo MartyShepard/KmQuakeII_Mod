@@ -26,8 +26,10 @@ Thanks to Robert Duffy for doing the grunt work of building this release.
 John Carmack
 Id Software
 
+Original KmQuake2: http://www.markshan.com/knightmare/
+Code from this Repository: https://github.com/m-x-d/KMQuake2
 
-KmQuake 0.20 B7 Modified: (Modified for personal and private use )
+KmQuake 0.20 B7 Modified: (Modified for personal and private use. Unofficial Build )
 -borderless	: Run Borderless in Window Mode
 -datadir	  : Add Fullpath to a seperate Datadir with BaseQ2
 -addondir	  : Add a seperate fullpath to a Addon/Mod. Optional use +set Game
